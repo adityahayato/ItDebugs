@@ -9,10 +9,21 @@ Usage
         --repo  demo/buggy-project \\
         --bug   "Completed tasks are appearing in the pending task list."
 
+    # Use the orchestrated multi-agent pipeline (default):
+    python -m itdebugs.investigate --repo demo/buggy-project \\
+        --bug "Completed tasks are appearing in the pending task list." \\
+        --mode orchestrated
+
+    # Use the legacy single-class engine:
+    python -m itdebugs.investigate --repo demo/buggy-project \\
+        --bug "Completed tasks are appearing in the pending task list." \\
+        --mode legacy
+
 Options
 -------
   --repo  PATH          Path to the repository to investigate (required)
   --bug   TEXT          Natural-language bug description (required)
+  --mode  MODE          'orchestrated' (default) or 'legacy'
   --out   FILE          Write the report to this file in addition to stdout
   --timeout SECONDS     Pytest timeout (default: 60)
   --verbose             Print progress messages to stderr
@@ -32,12 +43,13 @@ if str(_HERE) not in sys.path:
 
 from itdebugs.engine.investigator import Investigator
 from itdebugs.engine.reporter import render_text
+from itdebugs.orchestrator import Orchestrator
 
 
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="itdebugs",
-        description="ItDebugs — agentic developer debugging assistant (investigation engine)",
+        description="ItDebugs - agentic developer debugging assistant",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -52,6 +64,16 @@ def _build_parser() -> argparse.ArgumentParser:
         required=True,
         metavar="TEXT",
         help="Natural-language description of the bug to investigate.",
+    )
+    p.add_argument(
+        "--mode",
+        choices=["orchestrated", "legacy"],
+        default="orchestrated",
+        metavar="MODE",
+        help=(
+            "Investigation mode: 'orchestrated' (default) runs the multi-agent "
+            "pipeline; 'legacy' runs the original single-class engine."
+        ),
     )
     p.add_argument(
         "--out",
@@ -89,18 +111,30 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[ItDebugs] ERROR: repository path does not exist: {repo}", file=sys.stderr)
         return 2
 
-    print(f"\n[ItDebugs] Starting investigation ...", file=sys.stderr)
-    print(f"  Repository : {repo.resolve()}", file=sys.stderr)
-    print(f"  Bug report : {args.bug}\n", file=sys.stderr)
+    if args.mode == "orchestrated":
+        # ── Multi-agent orchestrated pipeline ─────────────────────────────
+        orchestrator = Orchestrator(
+            repo_path=str(repo),
+            bug_description=args.bug,
+            test_timeout=args.timeout,
+            verbose=args.verbose,
+        )
+        report = orchestrator.run()
 
-    investigator = Investigator(
-        repo_path=str(repo),
-        bug_description=args.bug,
-        test_timeout=args.timeout,
-        verbose=args.verbose,
-    )
+    else:
+        # ── Legacy single-class engine (unchanged) ─────────────────────────
+        print(f"\n[ItDebugs] Starting investigation (legacy mode) ...", file=sys.stderr)
+        print(f"  Repository : {repo.resolve()}", file=sys.stderr)
+        print(f"  Bug report : {args.bug}\n", file=sys.stderr)
 
-    report = investigator.investigate()
+        investigator = Investigator(
+            repo_path=str(repo),
+            bug_description=args.bug,
+            test_timeout=args.timeout,
+            verbose=args.verbose,
+        )
+        report = investigator.investigate()
+
     text = render_text(report)
 
     # Always print to stdout
