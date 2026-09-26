@@ -29,6 +29,8 @@ from itdebugs.engine.reporter import (
     RootCauseHypothesis,
     InvestigationReport,
 )
+# Repository intelligence types
+from itdebugs.intelligence.models import RepositoryProfile, CandidateFile, RepositoryIndex
 
 
 @dataclass
@@ -80,6 +82,9 @@ class InvestigationContext:
 
     # ── Repository Analyst output ─────────────────────────────────────────
     repo_structure: Optional[RepoStructure] = None
+    repo_profile: Optional[RepositoryProfile] = None        # set by RepositoryAnalyst (intelligence)
+    repo_index: Optional[RepositoryIndex] = None            # profile + candidates bundle
+    candidate_files: List[CandidateFile] = field(default_factory=list)  # set by RepositoryAnalyst
 
     # ── Test Analyst output ───────────────────────────────────────────────
     test_run: Optional[TestRunSummary] = None

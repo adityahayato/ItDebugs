@@ -149,6 +149,9 @@ class Orchestrator:
         for agent in agents:
             self._step(f"Agent: {agent.name}")
             agent.run(ctx)
+            # After Repository Analyst, print the intelligence summary
+            if agent.name == "Repository Analyst" and ctx.repo_profile is not None:
+                self._print_repo_intelligence_summary(ctx)
             # Surface any errors immediately
             if ctx.errors:
                 latest_errors = [e for e in ctx.errors if f"[{agent.name}]" in e]
@@ -166,6 +169,35 @@ class Orchestrator:
         self._log(f"{'=' * _BANNER_WIDTH}\n")
 
         return report
+
+    # ------------------------------------------------------------------
+    # Repository Intelligence summary
+    # ------------------------------------------------------------------
+
+    def _print_repo_intelligence_summary(self, ctx: InvestigationContext) -> None:
+        """Print a concise Repository Intelligence summary to stderr."""
+        profile = ctx.repo_profile
+        if profile is None:
+            return
+
+        bar = "-" * _BANNER_WIDTH
+        self._log(f"\n{bar}")
+        self._log("  Repository Intelligence")
+        self._log(bar)
+        for line in profile.summary_lines():
+            self._log(line)
+        n_candidates = len(ctx.candidate_files)
+        self._log(f"  Candidate files: {n_candidates}")
+        if self.verbose and ctx.candidate_files:
+            self._log("")
+            self._log("  Ranked candidate files:")
+            for i, cf in enumerate(ctx.candidate_files[:10], 1):
+                reasons_short = "; ".join(cf.score.reasons[:2])
+                self._log(
+                    f"    {i:2d}. [{cf.total_score:5.1f}]  {cf.relative_path}"
+                    + (f"  ({reasons_short})" if reasons_short else "")
+                )
+        self._log(bar)
 
     # ------------------------------------------------------------------
     # Report assembly

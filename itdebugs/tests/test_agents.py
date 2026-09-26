@@ -187,20 +187,22 @@ class TestRepositoryAnalyst:
         RepositoryAnalyst(verbose=False).run(ctx)
         assert len(ctx.relevant_files) > 0
 
-    def test_relevant_files_are_non_test_python(self):
+    def test_relevant_files_include_source_and_test(self):
+        """relevant_files may include test files when they are ranked as candidates."""
         ctx = _make_context()
         RepositoryAnalyst(verbose=False).run(ctx)
-        # relevant_files should not include test files
-        for f in ctx.relevant_files:
-            assert not Path(f).name.startswith("test_"), (
-                f"Test file {f} should not be in relevant_files"
-            )
+        # At least one source (non-test) Python file must be present
+        has_source = any(
+            not Path(f).name.startswith("test_") for f in ctx.relevant_files
+        )
+        assert has_source, "relevant_files has no source files"
 
     def test_adds_note(self):
         ctx = _make_context()
         RepositoryAnalyst(verbose=False).run(ctx)
-        notes = " ".join(ctx.agent_notes)
-        assert "source file" in notes.lower() or "package" in notes.lower()
+        notes = " ".join(ctx.agent_notes).lower()
+        # New note format: "src=N" or old format "source file"
+        assert "src=" in notes or "source" in notes or "profile" in notes
 
     def test_bad_repo_path_adds_error(self):
         ctx = _make_context(repo_path="/nonexistent/path/xyz")

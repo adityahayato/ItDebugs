@@ -75,7 +75,24 @@ class CodeAnalyst(BaseAgent):
             raise RuntimeError("repo_structure not set; run RepositoryAnalyst first")
 
         structure = ctx.repo_structure
-        source_paths = [f.relative_path for f in structure.source_files]
+
+        # Use intelligence-layer candidate files if available (pre-ranked);
+        # fall back to the full source file list from the engine scanner.
+        if ctx.candidate_files:
+            # Only evaluate SOURCE and TEST candidates from the intelligence layer
+            from itdebugs.intelligence.models import FileCategory
+            source_paths = [
+                c.relative_path for c in ctx.candidate_files
+                if c.record.category in (FileCategory.SOURCE, FileCategory.TEST)
+            ]
+            # Append any engine source files not already covered (for completeness)
+            existing = set(source_paths)
+            for f in structure.source_files:
+                if f.relative_path not in existing:
+                    source_paths.append(f.relative_path)
+        else:
+            source_paths = [f.relative_path for f in structure.source_files]
+
         keywords = ctx.keywords[:10]  # cap to avoid noise
 
         # ── Pass 1: collect file hit counts via grep ─────────────────────
