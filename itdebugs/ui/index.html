@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ItDebugs — Developer Intelligence</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">&lt;/&gt;</div>
+      <div><div class="brand-name">ItDebugs</div><div class="brand-subtitle">Developer Intelligence</div></div>
+    </div>
+
+    <nav class="navigation">
+      <button class="nav-item active" id="navDashboard">⌂ <span>Dashboard</span></button>
+      <button class="nav-item" id="navInvestigate">⌕ <span>Investigate</span></button>
+      <button class="nav-item" id="navHistory">◴ <span>History</span></button>
+      <div class="nav-section-title">WORKSPACE</div>
+      <button class="nav-item" id="navRepositories">▣ <span>Repositories</span></button>
+      <button class="nav-item" id="navSettings">⚙ <span>Settings</span></button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="system-ready"><span class="online-dot"></span><div><b>System Ready</b><small>All agents operational</small></div></div>
+      <div class="version">ItDebugs v1.0 · IBM Bob 2.0</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><div class="crumb">WORKSPACE　/　DASHBOARD</div><h1>Developer Dashboard</h1></div>
+      <div class="top-actions">
+        <span class="online-label"><span class="online-dot"></span> Agents Online</span>
+        <button id="themeToggle" class="icon-btn">☾</button>
+        <button id="profileButton" class="profile-btn">D</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <div class="hero">
+        <div class="eyebrow">AUTONOMOUS DEBUGGING</div>
+        <h2>Find the problem.<br><span>Understand the cause.</span></h2>
+        <p>ItDebugs analyzes your repository, investigates failing tests, identifies root causes and verifies repairs.</p>
+        <button id="investigateButton" class="primary-btn">⌕　Investigate Repository　→</button>
+      </div>
+
+      <section class="repo-card">
+        <div class="repo-info">
+          <div class="folder-icon">📁</div>
+          <div><div class="eyebrow">ACTIVE REPOSITORY</div><strong id="repositoryName">No repository selected</strong><small id="repositoryMeta">Select a project folder to begin debugging.</small></div>
+        </div>
+        <div class="repo-actions">
+          <input id="repositoryInput" type="file" webkitdirectory directory multiple hidden>
+          <button id="changeRepository" class="secondary-btn">Change Repository</button>
+          <button id="repositoryAnalyze" class="primary-btn small" disabled>Analyze →</button>
+        </div>
+      </section>
+
+      <section id="metrics" class="metrics">
+        <div class="metric"><b>TESTS ANALYZED</b><strong id="metricTotal">—</strong><small id="metricTotalSub">Waiting for analysis</small></div>
+        <div class="metric"><b>PASSING</b><strong class="green" id="metricPassed">—</strong><small id="metricPassRate">—</small></div>
+        <div class="metric"><b>FAILURES</b><strong class="red" id="metricFailed">—</strong><small id="metricFailedSub">Waiting for analysis</small></div>
+        <div class="metric"><b>AGENTS</b><strong>7</strong><small class="green-text">Operational</small></div>
+      </section>
+
+      <section id="resultsSection" class="results-grid hidden">
+        <div class="panel">
+          <div class="panel-heading"><div><div class="eyebrow">LATEST RUN</div><h3>Recent Investigation</h3></div><span id="failureBadge" class="badge">0 failures</span></div>
+          <div id="investigationResults"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-heading"><div><div class="eyebrow">INTELLIGENCE PIPELINE</div><h3>Agent Status</h3></div><span class="live">• LIVE</span></div>
+          <div class="agent-list">
+            <div>✓ <b>Repository Analyst</b><small>Repository indexed</small></div>
+            <div>✓ <b>Test Analyst</b><small>Failures identified</small></div>
+            <div>✓ <b>Evidence Agent</b><small>Evidence collected</small></div>
+            <div>✦ <b>Root Cause Agent</b><small>Granite reasoning active</small></div>
+            <div>○ <b>Verification Agent</b><small>Awaiting repair</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="quick panel">
+        <div class="eyebrow">QUICK ACTIONS</div><h3>Developer Tools</h3>
+        <div class="quick-grid">
+          <button id="runTestsButton" class="quick-btn"><span>▶</span><div><b>Run Tests</b><small>Execute repository tests</small></div>→</button>
+          <button id="analyzeCodeButton" class="quick-btn"><span>⌁</span><div><b>Analyze Code</b><small>Inspect suspicious files</small></div>→</button>
+          <button id="repairButton" class="quick-btn"><span>↻</span><div><b>Repair &amp; Verify</b><small>Review and validate a fix</small></div>→</button>
+        </div>
+      </section>
+
+      <!-- GAME IS ALWAYS PRESENT -->
+      <section class="game-section">
+        <div class="game-card">
+          <div class="game-head">
+            <div class="game-title">
+              <div class="game-logo">⚡</div>
+              <div><div class="game-eyebrow">QUICK BREAK</div><h3>Reaction Rush</h3><p>Test your reflexes. Beat your best.</p></div>
+            </div>
+            <button id="closeBugHunter" class="game-close">×</button>
+          </div>
+          <div class="game-stats">
+            <div><span>LAST</span><b id="gameScore">—</b></div>
+            <div><span>BEST</span><b id="gameBest">—</b></div>
+            <div><span>AVERAGE</span><b id="gameAverage">—</b></div>
+            <div><span>STREAK</span><b id="gameStreak">0</b></div>
+          </div>
+          <div id="reactionArea" class="reaction-area">
+            <div class="rings"></div>
+            <div class="reaction-copy"><h2 id="reactionStatus">READY?</h2><p id="reactionMessage">Hit START and wait for the signal.</p><button id="reactionButton" class="reaction-btn">START</button></div>
+          </div>
+          <div id="reactionResults" class="game-result hidden">
+            <strong id="finalScore"></strong><span id="finalDetails"></span><button id="restartGame" class="try-btn">TRY AGAIN</button>
+          </div>
+          <div class="game-foot"><span>⚡ Unlimited attempts</span><span>ESC to exit</span></div>
+        </div>
+      </section>
+    </section>
+  </main>
+</div>
+
+<div id="bugHunterModal" class="hidden"></div>
+<script src="app.js"></script>
+</body>
+</html>

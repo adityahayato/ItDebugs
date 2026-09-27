@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ItDebugs — Developer Intelligence</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-mark">&lt;/&gt;</div>
+
+            <div>
+                <div class="brand-name">ItDebugs</div>
+                <div class="brand-subtitle">
+                    Developer Intelligence
+                </div>
+            </div>
+        </div>
+
+
+        <nav class="navigation">
+
+            <button
+                class="nav-item active"
+                id="navDashboard"
+                type="button"
+            >
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </button>
+
+
+            <button
+                class="nav-item"
+                id="navInvestigate"
+                type="button"
+            >
+                <span class="nav-icon">⌕</span>
+                <span>Investigate</span>
+            </button>
+
+
+            <button
+                class="nav-item"
+                id="navHistory"
+                type="button"
+            >
+                <span class="nav-icon">◴</span>
+                <span>History</span>
+            </button>
+
+
+            <div class="nav-section-title">
+                WORKSPACE
+            </div>
+
+
+            <button
+                class="nav-item"
+                id="navRepositories"
+                type="button"
+            >
+                <span class="nav-icon">▣</span>
+                <span>Repositories</span>
+            </button>
+
+
+            <button
+                class="nav-item"
+                id="navSettings"
+                type="button"
+            >
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+                    <div class="status-title">
+                        System Ready
+                    </div>
+
+                    <div class="status-subtitle">
+                        All agents operational
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="version">
+                ItDebugs v1.0 · IBM Bob 2.0
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <div class="breadcrumb">
+                    Workspace
+                    <span>/</span>
+                    Dashboard
+                </div>
+
+                <h1>
+                    Developer Dashboard
+                </h1>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <div class="agent-status">
+                    <span class="status-dot"></span>
+                    Agents Online
+                </div>
+
+
+                <button
+                    class="theme-toggle"
+                    id="themeToggle"
+                    type="button"
+                >
+                    ☾
+                </button>
+
+
+                <button
+                    class="avatar"
+                    id="profileButton"
+                    type="button"
+                >
+                    D
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- DASHBOARD -->
+
+        <section
+            class="dashboard"
+            id="dashboard"
+        >
+
+            <!-- HERO -->
+
+            <section class="welcome-section">
+
+                <div>
+
+                    <div class="eyebrow">
+                        AUTONOMOUS DEBUGGING
+                    </div>
+
+                    <h2>
+                        Find the problem.
+                        <br>
+                        <span>Understand the cause.</span>
+                    </h2>
+
+                    <p>
+                        ItDebugs analyzes your repository,
+                        investigates failing tests,
+                        identifies root causes and verifies repairs.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary-button"
+                    id="investigateButton"
+                    type="button"
+                >
+                    ⌕
+                    Investigate Repository
+                    →
+                </button>
+
+            </section>
+
+
+            <!-- REPOSITORY -->
+
+            <section class="repository-card">
+
+                <div class="repository-main">
+
+                    <div class="repository-icon">
+                        📁
+                    </div>
+
+
+                    <div class="repository-info">
+
+                        <div class="repository-label">
+                            ACTIVE REPOSITORY
+                        </div>
+
+                        <div
+                            class="repository-name"
+                            id="repositoryName"
+                        >
+                            No repository selected
+                        </div>
+
+                        <div
+                            class="repository-meta"
+                            id="repositoryMeta"
+                        >
+                            Select a project folder to begin debugging.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="repository-actions">
+
+                    <label
+                        class="repository-button"
+                        for="repositoryInput"
+                    >
+                        Change Repository
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="repositoryInput"
+                        webkitdirectory
+                        directory
+                        multiple
+                        hidden
+                    >
+
+
+                    <button
+                        class="repository-analyze"
+                        id="repositoryAnalyze"
+                        type="button"
+                        disabled
+                    >
+                        Analyze →
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- EMPTY METRICS -->
+
+            <div
+                class="metrics-grid"
+                id="metricsGrid"
+            >
+
+                <div class="metric-card">
+
+                    <div class="metric-header">
+                        TESTS ANALYZED
+                        <span>◇</span>
+                    </div>
+
+                    <div
+                        class="metric-value"
+                        id="metricTotal"
+                    >
+                        —
+                    </div>
+
+                    <div class="metric-footer">
+                        Waiting for analysis
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-header">
+                        PASSING
+                        <span class="success">✓</span>
+                    </div>
+
+                    <div
+                        class="metric-value success-text"
+                        id="metricPassed"
+                    >
+                        —
+                    </div>
+
+                    <div
+                        class="metric-footer"
+                        id="metricPassRate"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-header">
+                        FAILURES
+                        <span class="danger">!</span>
+                    </div>
+
+                    <div
+                        class="metric-value danger-text"
+                        id="metricFailed"
+                    >
+                        —
+                    </div>
+
+                    <div class="metric-footer danger-label">
+                        Waiting for analysis
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-header">
+                        AGENTS
+                        <span>✦</span>
+                    </div>
+
+                    <div class="metric-value">
+                        7
+                    </div>
+
+                    <div class="metric-footer success-label">
+                        Operational
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RESULTS -->
+
+            <div
+                class="content-grid"
+                id="resultsSection"
+                style="display:none;"
+            >
+
+                <section class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <div class="panel-eyebrow">
+                                LATEST RUN
+                            </div>
+
+                            <h3>
+                                Investigation Result
+                            </h3>
+
+                        </div>
+
+                        <span
+                            class="badge warning"
+                            id="failureBadge"
+                        >
+                            —
+                        </span>
+
+                    </div>
+
+
+                    <div id="investigationResults">
+
+                        <div class="empty-result">
+                            No investigation performed yet.
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <section class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <div class="panel-eyebrow">
+                                INTELLIGENCE PIPELINE
+                            </div>
+
+                            <h3>
+                                Agent Status
+                            </h3>
+
+                        </div>
+
+                        <span class="live-indicator">
+                            ● LIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="pipeline">
+
+                        <div class="pipeline-step completed">
+                            <div class="pipeline-node">✓</div>
+                            <div>
+                                <strong>Repository Analyst</strong>
+                                <span>Repository indexed</span>
+                            </div>
+                        </div>
+
+                        <div class="pipeline-line"></div>
+
+                        <div class="pipeline-step completed">
+                            <div class="pipeline-node">✓</div>
+                            <div>
+                                <strong>Test Analyst</strong>
+                                <span>Failures analyzed</span>
+                            </div>
+                        </div>
+
+                        <div class="pipeline-line"></div>
+
+                        <div class="pipeline-step active-step">
+                            <div class="pipeline-node">✦</div>
+                            <div>
+                                <strong>Root Cause Agent</strong>
+                                <span>Granite reasoning</span>
+                            </div>
+                        </div>
+
+                        <div class="pipeline-line"></div>
+
+                        <div class="pipeline-step waiting">
+                            <div class="pipeline-node">○</div>
+                            <div>
+                                <strong>Verification Agent</strong>
+                                <span>Awaiting repair</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- ALWAYS VISIBLE LOWER SECTION -->
+
+            <div class="lower-grid">
+
+                <!-- GAME -->
+
+                <section class="game-card">
+
+                    <div class="game-decoration">
+                        ⚡
+                    </div>
+
+                    <div class="game-content">
+
+                        <div class="game-eyebrow">
+                            QUICK BREAK
+                        </div>
+
+                        <h3>
+                            Reaction Rush
+                        </h3>
+
+                        <p>
+                            Test your reflexes.
+                            Wait for the signal and react.
+                        </p>
+
+                        <div class="game-stats">
+
+                            <span id="dashboardBest">
+                                ⚡ Best —
+                            </span>
+
+                            <span>
+                                Unlimited attempts
+                            </span>
+
+                        </div>
+
+                        <button
+                            class="game-button"
+                            id="bugHunterButton"
+                            type="button"
+                        >
+                            Start Reaction Rush →
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <section class="panel quick-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <div class="panel-eyebrow">
+                                QUICK ACTIONS
+                            </div>
+
+                            <h3>
+                                Developer Tools
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+                        <button
+                            class="quick-action"
+                            id="runTestsButton"
+                            type="button"
+                        >
+
+                            <span class="quick-icon">
+                                ▶
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Run Tests
+                                </strong>
+
+                                <span>
+                                    Execute repository tests
+                                </span>
+                            </div>
+
+                            <span>→</span>
+
+                        </button>
+
+
+                        <button
+                            class="quick-action"
+                            id="analyzeCodeButton"
+                            type="button"
+                        >
+
+                            <span class="quick-icon">
+                                ⌁
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Analyze Code
+                                </strong>
+
+                                <span>
+                                    Inspect suspicious files
+                                </span>
+                            </div>
+
+                            <span>→</span>
+
+                        </button>
+
+
+                        <button
+                            class="quick-action"
+                            id="repairButton"
+                            type="button"
+                        >
+
+                            <span class="quick-icon">
+                                ↻
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Repair & Verify
+                                </strong>
+
+                                <span>
+                                    Review and validate a fix
+                                </span>
+                            </div>
+
+                            <span>→</span>
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     REACTION RUSH
+     ===================================================== -->
+
+<div
+    class="modal hidden"
+    id="bugHunterModal"
+>
+
+    <div class="arcade-backdrop"></div>
+
+
+    <div class="game-modal arcade-modal">
+
+        <div class="arcade-header">
+
+            <div class="arcade-brand">
+
+                <div class="arcade-icon">
+                    ⚡
+                </div>
+
+                <div>
+
+                    <div class="arcade-eyebrow">
+                        QUICK BREAK
+                    </div>
+
+                    <h2>
+                        Reaction Rush
+                    </h2>
+
+                    <p>
+                        Test your reflexes. Beat your best.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="arcade-close"
+                id="closeBugHunter"
+                type="button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="arcade-hud">
+
+            <div class="arcade-stat">
+                <span>LAST</span>
+                <strong id="gameScore">—</strong>
+            </div>
+
+            <div class="arcade-stat">
+                <span>BEST</span>
+                <strong id="gameStreak">—</strong>
+            </div>
+
+            <div class="arcade-stat">
+                <span>AVERAGE</span>
+                <strong id="gameTimer">—</strong>
+            </div>
+
+            <div class="arcade-stat">
+                <span>STREAK</span>
+                <strong id="gameRound">0</strong>
+            </div>
+
+        </div>
+
+
+        <div
+            class="arcade-arena"
+            id="reactionArea"
+        >
+
+            <div class="arcade-grid"></div>
+
+            <div class="arcade-ring ring-one"></div>
+            <div class="arcade-ring ring-two"></div>
+            <div class="arcade-ring ring-three"></div>
+
+
+            <div class="arcade-center">
+
+                <div
+                    class="reaction-status"
+                    id="reactionStatus"
+                >
+                    READY?
+                </div>
+
+                <div
+                    class="reaction-message"
+                    id="reactionMessage"
+                >
+                    Hit START and wait for the signal.
+                </div>
+
+                <button
+                    class="reaction-button arcade-button"
+                    id="reactionButton"
+                    type="button"
+                >
+                    START
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="reaction-results hidden"
+            id="reactionResults"
+        >
+
+            <div class="results-icon">
+                ⚡
+            </div>
+
+            <div class="results-label">
+                NICE REFLEX
+            </div>
+
+            <div
+                class="results-score"
+                id="finalScore"
+            >
+                —
+            </div>
+
+            <div
+                class="results-details"
+                id="finalDetails"
+            >
+                Keep going and beat your best.
+            </div>
+
+            <button
+                class="next-round-button"
+                id="restartGame"
+                type="button"
+            >
+                PLAY AGAIN ⚡
+            </button>
+
+        </div>
+
+
+        <div class="arcade-footer">
+
+            <span>
+                ⚡ Unlimited attempts
+            </span>
+
+            <span>
+                ESC to exit
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
