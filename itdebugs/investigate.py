@@ -41,6 +41,7 @@ from itdebugs.multi_bug import (
     render_multi_bug_report,
 )
 from itdebugs.orchestrator import Orchestrator
+from itdebugs.repair_loop import RepairLoop
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -75,6 +76,24 @@ def _build_parser() -> argparse.ArgumentParser:
             "Automatically discover all failing tests and investigate "
             "the resulting bug groups."
         ),
+    )
+
+    p.add_argument(
+        "--repair",
+        action="store_true",
+        help=(
+            "Autonomous repair loop: investigate failures, generate a "
+            "patch, prompt for approval, apply the patch, retest, and "
+            "repeat until all tests pass or max iterations are reached."
+        ),
+    )
+
+    p.add_argument(
+        "--max-iterations",
+        type=int,
+        default=5,
+        metavar="N",
+        help="Maximum repair iterations (default: 5, used with --repair).",
     )
 
     p.add_argument(
@@ -159,6 +178,31 @@ def main(argv: list[str] | None = None) -> int:
             return 1
 
         return 0
+
+    # ================================================================
+    # REPAIR MODE
+    # ================================================================
+
+    if args.repair:
+        loop = RepairLoop(
+            repo_path=str(repo),
+            max_iterations=args.max_iterations,
+            test_timeout=args.timeout,
+            verbose=args.verbose,
+        )
+        repair_result = loop.run()
+        summary = repair_result.summary()
+        print(summary)
+
+        if args.out:
+            out_path = Path(args.out)
+            out_path.write_text(summary, encoding="utf-8")
+            print(
+                f"\n[ItDebugs] Report written to: {out_path.resolve()}",
+                file=sys.stderr,
+            )
+
+        return 0 if repair_result.all_green else 1
 
     # ================================================================
     # SINGLE-BUG MODE
