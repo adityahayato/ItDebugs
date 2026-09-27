@@ -68,7 +68,7 @@ class TaskManager:
         tasks whose status is "completed" are NOT excluded, so the method
         returns all tasks rather than just the pending ones.
         """
-        return [t for t in self._tasks if t.status != "complete"]  # BUG: should be "completed"
+        return [t for t in self._tasks if t.status != "complete"]
 
     def get_completed_tasks(self) -> List[Task]:
         """Return only tasks that have been completed."""
